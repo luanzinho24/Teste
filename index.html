@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">LUA</div>
+        <nav class="nav">
+          <a href="#" class="nav-item active">Dashboard</a>
+          <a href="#" class="nav-item">Clientes</a>
+          <a href="#" class="nav-item">Configurações</a>
+          <a href="#" class="nav-item">Relatórios</a>
+        </nav>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Sistema</p>
+            <h1>Dashboard</h1>
+          </div>
+          <div class="status-pill" id="sessionState">Sessão ativa</div>
+        </header>
+
+        <section class="overview-grid">
+          <article class="card">
+            <span class="label">Clientes online</span>
+            <strong id="onlineClients">0</strong>
+            <small>Atualização em tempo real</small>
+          </article>
+          <article class="card">
+            <span class="label">Heartbeat</span>
+            <strong id="heartbeatStatus">Normal</strong>
+            <small>Última verificação: <span id="lastPing">--</span></small>
+          </article>
+          <article class="card">
+            <span class="label">Sincronização</span>
+            <strong>30s</strong>
+            <small>Intervalo recomendado</small>
+          </article>
+        </section>
+
+        <section class="card section-card" id="integracao-lua">
+          <div class="section-header">
+            <h2>INTEGRAÇÃO LUA</h2>
+            <span class="badge">API</span>
+          </div>
+
+          <div class="integration-grid">
+            <div class="info-row">
+              <span class="info-label">URL exata da API de conexão</span>
+              <code>https://api.exemplo.com/v1/lua/connect</code>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Método HTTP utilizado</span>
+              <code>POST</code>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Formato JSON esperado</span>
+              <pre>{
+  "clientId": "string",
+  "deviceId": "string",
+  "sessionId": "string",
+  "status": "online",
+  "lastSeen": "2026-11-01T12:00:00Z"
+}</pre>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Endpoint para buscar configurações</span>
+              <code>GET /v1/lua/config?clientId={clientId}</code>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Endpoint para atualizar heartbeat do cliente</span>
+              <code>POST /v1/lua/heartbeat</code>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Endpoint para consultar status online/offline</span>
+              <code>GET /v1/lua/status?clientId={clientId}</code>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Intervalo recomendado de sincronização</span>
+              <code>30 segundos</code>
+            </div>
+          </div>
+        </section>
+
+        <section class="card notes-card">
+          <h3>Observações de segurança</h3>
+          <p>
+            Tokens e credenciais permanecerão armazenados apenas na sessão do navegador
+            e nunca serão expostos no frontend desta tela.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
