@@ -10,11 +10,14 @@
     <div class="app-shell">
       <aside class="sidebar">
         <div class="brand">LUA</div>
-        <nav class="nav">
-          <a href="#" class="nav-item active">Dashboard</a>
-          <a href="#" class="nav-item">Clientes</a>
-          <a href="#" class="nav-item">Configurações</a>
-          <a href="#" class="nav-item">Relatórios</a>
+        <nav class="nav" aria-label="Navegação do dashboard">
+          <button class="nav-item active" type="button" data-tab="ESP">ESP</button>
+          <button class="nav-item" type="button" data-tab="AIMBOT">AIMBOT</button>
+          <button class="nav-item" type="button" data-tab="SILENT AIM">SILENT AIM</button>
+          <button class="nav-item" type="button" data-tab="FOV">FOV</button>
+          <button class="nav-item" type="button" data-tab="VISUAL">VISUAL</button>
+          <button class="nav-item" type="button" data-tab="CONFIG">CONFIG</button>
+          <button class="nav-item" type="button" data-tab="LUA">LUA</button>
         </nav>
       </aside>
 
@@ -22,7 +25,7 @@
         <header class="topbar">
           <div>
             <p class="eyebrow">Sistema</p>
-            <h1>Dashboard</h1>
+            <h1 id="currentTabTitle">ESP</h1>
           </div>
           <div class="status-pill" id="sessionState">Sessão ativa</div>
         </header>
@@ -40,57 +43,310 @@
           </article>
           <article class="card">
             <span class="label">Sincronização</span>
-            <strong>30s</strong>
+            <strong id="syncIntervalValue">30s</strong>
             <small>Intervalo recomendado</small>
           </article>
         </section>
 
-        <section class="card section-card" id="integracao-lua">
-          <div class="section-header">
-            <h2>INTEGRAÇÃO LUA</h2>
-            <span class="badge">API</span>
+        <section class="tab-panel active" data-panel="ESP">
+          <div class="card section-card">
+            <div class="section-header">
+              <h2>ESP</h2>
+              <span class="badge">VISUAL</span>
+            </div>
+
+            <div class="controls-grid">
+              <label class="switch-row">
+                <span>Habilitar ESP</span>
+                <input type="checkbox" data-setting="esp.enabled" />
+              </label>
+
+              <div class="field-block">
+                <label for="espColor">Cor principal</label>
+                <input id="espColor" type="color" value="#4f8cff" data-setting="esp.color" />
+              </div>
+
+              <div class="field-block">
+                <label for="espDistance">Distância máxima</label>
+                <div class="inline-control">
+                  <input id="espDistance" type="number" min="50" max="500" step="10" value="180" data-setting="esp.distance" />
+                  <span>m</span>
+                </div>
+              </div>
+
+              <div class="field-block">
+                <label for="espRange">Visibilidade</label>
+                <select id="espRange" data-setting="esp.visibility">
+                  <option value="Visible only">Apenas visíveis</option>
+                  <option value="All in range">Todos no alcance</option>
+                  <option value="Priority">Prioridade</option>
+                </select>
+              </div>
+
+              <div class="field-block full-width">
+                <span class="field-title">Entidades autorizadas</span>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" class="entity-toggle" value="Players" data-array="esp.authorizedEntities" /> Players</label>
+                  <label><input type="checkbox" class="entity-toggle" value="Weapons" data-array="esp.authorizedEntities" /> Weapons</label>
+                  <label><input type="checkbox" class="entity-toggle" value="Loot" data-array="esp.authorizedEntities" /> Loot</label>
+                  <label><input type="checkbox" class="entity-toggle" value="Grenades" data-array="esp.authorizedEntities" /> Grenades</label>
+                </div>
+              </div>
+
+              <div class="field-block full-width">
+                <span class="field-title">Objetos visuais</span>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" data-setting="esp.boxes" /> Caixas</label>
+                  <label><input type="checkbox" data-setting="esp.names" /> Nomes</label>
+                  <label><input type="checkbox" data-setting="esp.health" /> Vida</label>
+                  <label><input type="checkbox" data-setting="esp.distanceLabel" /> Distância</label>
+                </div>
+              </div>
+            </div>
           </div>
+        </section>
 
-          <div class="integration-grid">
-            <div class="info-row">
-              <span class="info-label">URL exata da API de conexão</span>
-              <code>https://api.exemplo.com/v1/lua/connect</code>
+        <section class="tab-panel" data-panel="AIMBOT">
+          <div class="card section-card">
+            <div class="section-header">
+              <h2>AIMBOT</h2>
+              <span class="badge">DEMO</span>
             </div>
 
-            <div class="info-row">
-              <span class="info-label">Método HTTP utilizado</span>
-              <code>POST</code>
+            <div class="controls-grid">
+              <label class="switch-row">
+                <span>Ativar assistência visual</span>
+                <input type="checkbox" data-setting="aimbot.enabled" />
+              </label>
+
+              <div class="field-block">
+                <label for="aimbotMode">Modo</label>
+                <select id="aimbotMode" data-setting="aimbot.mode">
+                  <option value="Assist">Assist</option>
+                  <option value="Silent">Silent</option>
+                  <option value="Legacy">Legacy</option>
+                </select>
+              </div>
+
+              <div class="field-block">
+                <label for="aimbotFov">Alcance de foco</label>
+                <div class="inline-control">
+                  <input id="aimbotFov" type="number" min="10" max="180" step="5" value="80" data-setting="aimbot.range" />
+                  <span>°</span>
+                </div>
+              </div>
+
+              <div class="field-block">
+                <label for="aimbotSmoothness">Suavização</label>
+                <input id="aimbotSmoothness" type="range" min="0" max="100" value="35" data-setting="aimbot.smoothness" />
+              </div>
+
+              <div class="field-block full-width">
+                <span class="field-title">Prioridade</span>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" data-setting="aimbot.head" /> Cabeça</label>
+                  <label><input type="checkbox" data-setting="aimbot.body" /> Corpo</label>
+                  <label><input type="checkbox" data-setting="aimbot.weapon" /> Arma</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="SILENT AIM">
+          <div class="card section-card">
+            <div class="section-header">
+              <h2>SILENT AIM</h2>
+              <span class="badge">DEMO</span>
             </div>
 
-            <div class="info-row">
-              <span class="info-label">Formato JSON esperado</span>
-              <pre>{
-  "clientId": "string",
-  "deviceId": "string",
-  "sessionId": "string",
-  "status": "online",
-  "lastSeen": "2026-11-01T12:00:00Z"
-}</pre>
+            <div class="controls-grid">
+              <label class="switch-row">
+                <span>Modo silencioso</span>
+                <input type="checkbox" data-setting="silentAim.enabled" />
+              </label>
+
+              <div class="field-block">
+                <label for="silentMode">Estratégia</label>
+                <select id="silentMode" data-setting="silentAim.mode">
+                  <option value="Passive">Passive</option>
+                  <option value="Adaptive">Adaptive</option>
+                  <option value="Burst">Burst</option>
+                </select>
+              </div>
+
+              <div class="field-block">
+                <label for="silentDelay">Atraso</label>
+                <div class="inline-control">
+                  <input id="silentDelay" type="number" min="0" max="500" step="10" value="120" data-setting="silentAim.delay" />
+                  <span>ms</span>
+                </div>
+              </div>
+
+              <div class="field-block">
+                <label for="silentPitch">Desvio</label>
+                <input id="silentPitch" type="range" min="0" max="100" value="40" data-setting="silentAim.pitch" />
+              </div>
+
+              <div class="field-block full-width">
+                <span class="field-title">Comportamento</span>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" data-setting="silentAim.prediction" /> Predição</label>
+                  <label><input type="checkbox" data-setting="silentAim.trigger" /> Trigger visual</label>
+                  <label><input type="checkbox" data-setting="silentAim.hold" /> Hold</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="FOV">
+          <div class="card section-card">
+            <div class="section-header">
+              <h2>FOV</h2>
+              <span class="badge">CAMERA</span>
             </div>
 
-            <div class="info-row">
-              <span class="info-label">Endpoint para buscar configurações</span>
-              <code>GET /v1/lua/config?clientId={clientId}</code>
+            <div class="controls-grid">
+              <div class="field-block">
+                <label for="cameraFovValue">Valor do FOV</label>
+                <div class="inline-control">
+                  <input id="cameraFovValue" type="number" min="30" max="140" step="1" value="90" data-setting="fov.value" />
+                  <span>°</span>
+                </div>
+              </div>
+
+              <div class="field-block">
+                <label for="cameraFovSlider">Ajuste do slider</label>
+                <input id="cameraFovSlider" type="range" min="30" max="140" step="1" value="90" data-setting="fov.value" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="VISUAL">
+          <div class="card section-card">
+            <div class="section-header">
+              <h2>VISUAL</h2>
+              <span class="badge">THEME</span>
             </div>
 
-            <div class="info-row">
-              <span class="info-label">Endpoint para atualizar heartbeat do cliente</span>
-              <code>POST /v1/lua/heartbeat</code>
+            <div class="controls-grid">
+              <div class="field-block">
+                <label for="visualEnemy">Cor do alvo</label>
+                <input id="visualEnemy" type="color" value="#ff5a5a" data-setting="visual.enemyColor" />
+              </div>
+
+              <div class="field-block">
+                <label for="visualAlly">Cor aliada</label>
+                <input id="visualAlly" type="color" value="#4f8cff" data-setting="visual.allyColor" />
+              </div>
+
+              <div class="field-block">
+                <label for="visualTransparency">Transparência</label>
+                <input id="visualTransparency" type="range" min="0" max="100" value="72" data-setting="visual.transparency" />
+              </div>
+
+              <div class="field-block full-width">
+                <span class="field-title">Indicadores</span>
+                <div class="checkbox-group">
+                  <label><input type="checkbox" data-setting="visual.labels" /> Labels</label>
+                  <label><input type="checkbox" data-setting="visual.shadows" /> Sombras</label>
+                  <label><input type="checkbox" data-setting="visual.outline" /> Contorno</label>
+                  <label><input type="checkbox" data-setting="visual.trails" /> Rastro</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="CONFIG">
+          <div class="card section-card">
+            <div class="section-header">
+              <h2>CONFIG</h2>
+              <span class="badge">SESSION</span>
             </div>
 
-            <div class="info-row">
-              <span class="info-label">Endpoint para consultar status online/offline</span>
-              <code>GET /v1/lua/status?clientId={clientId}</code>
+            <div class="controls-grid">
+              <label class="switch-row">
+                <span>Salvar automaticamente</span>
+                <input type="checkbox" data-setting="config.autoSave" />
+              </label>
+
+              <div class="field-block full-width">
+                <span class="field-title">Ações</span>
+                <div class="button-row">
+                  <button type="button" class="action-btn primary" id="saveConfigBtn">Salvar</button>
+                  <button type="button" class="action-btn" id="loadConfigBtn">Carregar</button>
+                  <button type="button" class="action-btn danger" id="restoreConfigBtn">Restaurar</button>
+                </div>
+              </div>
+
+              <div class="field-block full-width">
+                <span class="field-title">Resumo da sessão</span>
+                <div class="info-row compact">
+                  <span class="info-label">Último salvamento</span>
+                  <code id="lastSavedLabel">--</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-panel" data-panel="LUA">
+          <div class="card section-card">
+            <div class="section-header">
+              <h2>LUA</h2>
+              <span class="badge">API</span>
             </div>
 
-            <div class="info-row">
-              <span class="info-label">Intervalo recomendado de sincronização</span>
-              <code>30 segundos</code>
+            <div class="controls-grid">
+              <label class="switch-row">
+                <span>Conexão ativa</span>
+                <input type="checkbox" data-setting="lua.connected" />
+              </label>
+
+              <div class="field-block">
+                <label for="luaStatus">Status</label>
+                <select id="luaStatus" data-setting="lua.status">
+                  <option value="Online">Online</option>
+                  <option value="Synced">Sincronizado</option>
+                  <option value="Warning">Atenção</option>
+                  <option value="Offline">Offline</option>
+                </select>
+              </div>
+
+              <div class="field-block">
+                <label for="luaSyncInterval">Sincronização</label>
+                <div class="inline-control">
+                  <input id="luaSyncInterval" type="number" min="5" max="120" step="5" value="30" data-setting="lua.syncInterval" />
+                  <span>s</span>
+                </div>
+              </div>
+
+              <div class="field-block full-width">
+                <span class="field-title">Estado do cliente</span>
+                <div class="info-row compact">
+                  <span class="info-label">Último heartbeat</span>
+                  <code id="luaHeartbeatLabel">--</code>
+                </div>
+              </div>
+
+              <div class="field-block full-width">
+                <span class="field-title">Endpoints existentes</span>
+                <div class="info-row compact">
+                  <span class="info-label">Configuração</span>
+                  <code>GET /v1/lua/config?clientId={clientId}</code>
+                </div>
+                <div class="info-row compact">
+                  <span class="info-label">Heartbeat</span>
+                  <code>POST /v1/lua/heartbeat</code>
+                </div>
+                <div class="info-row compact">
+                  <span class="info-label">Status</span>
+                  <code>GET /v1/lua/status?clientId={clientId}</code>
+                </div>
+              </div>
             </div>
           </div>
         </section>
